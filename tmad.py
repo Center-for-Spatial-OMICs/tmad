@@ -17,9 +17,9 @@ XR_path = sys.argv[0]
 coord_path = sys.argv[1]
 target_path = sys.argv[2]
 
-tx_path = XR_path+'transcripts.csv.gz'
-exp_mat = XR_path+'cell_feature_matrix'
-meta_path = XR_path+'cells.csv.gz'
+tx_path = os.path.join(XR_path,'transcripts.csv.gz')
+exp_mat = os.path.join(XR_path,'cell_feature_matrix')
+meta_path = os.path.join(XR_path,'cells.csv.gz')
 
 tx = pd.read_csv(tx_path, compression='gzip')
 meta = pd.read_csv(meta_path, compression='gzip')
@@ -101,30 +101,31 @@ for i in range(len(coord_files)):
 
     # save the barcodes, mtx, and copy the features
     temp_barcode = cols.loc[TMA_indices[i+1]]
-    temp_barcode.to_csv(target_path+curr_dir_name+'cell_feature_matrix/barcodes.tsv.gz', sep='\t', index=False, header=False, compression='gzip')
+    temp_barcode.to_csv(os.path.join(target_path,curr_dir_name,'cell_feature_matrix/barcodes.tsv.gz'), sep='\t', index=False, header=False, compression='gzip')
 
     temp_mat = exp[:, TMA_indices[i+1]]
-    np.savetxt(target_path+curr_dir_name+'cell_feature_matrix/matrix.mtx', temp_mat, delimiter='\t', fmt='%.18e', comments='', header='%%MatrixMarket matrix coordinate real general')
+    # np.savetxt(target_path+curr_dir_name+'cell_feature_matrix/matrix.mtx', temp_mat, delimiter='\t', fmt='%.18e', comments='', header='%%MatrixMarket matrix coordinate real general')
+    scipy.io.mmwrite(os.path.join(target_path,curr_dir_name,'cell_feature_matrix/matrix.mtx'), temp_mat)
 
     # Compress the MTX file using gzip
-    with gzip.open(target_path+curr_dir_name+'cell_feature_matrix/matrix.mtx.gz', 'wb') as f:
-        f.write(open(target_path+curr_dir_name+'cell_feature_matrix/matrix.mtx', 'rb').read())
+    with gzip.open(os.path.join(target_path,curr_dir_name,'cell_feature_matrix/matrix.mtx.gz'), 'wb') as f:
+        f.write(open(os.path.join(target_path,curr_dir_name,'cell_feature_matrix/matrix.mtx'), 'rb').read())
 
     # Remove the uncompressed MTX file
-    os.remove(target_path+curr_dir_name+'cell_feature_matrix/matrix.mtx')
+    os.remove(os.join.path(target_path,curr_dir_name,'cell_feature_matrix/matrix.mtx'))
 
     # copy the features
     if os.name == 'nt':  # Windows
-        os.system(f'copy "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path+curr_dir_name+'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
+        os.system(f'copy "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path,curr_dir_name,'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
     else:  # Unix-based (Linux, macOS)
-        os.system(f'cp "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path+curr_dir_name+'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
+        os.system(f'cp "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path,curr_dir_name,'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
 
     # save the metadata
     temp_meta = meta[meta['TMA'] == (i+1)]
     temp_meta = temp_meta.drop(['TMA'], axis=1)
-    temp_meta.to_csv(target_path+curr_dir_name+'cells.csv.gz', index=False, compression='gzip')
+    temp_meta.to_csv(os.join.path(target_path,curr_dir_name,'cells.csv.gz'), index=False, compression='gzip')
 
     # save the tx
     temp_tx = tx[tx['TMA'] == (i+1)]
     temp_tx = temp_tx.drop(['TMA'], axis=1)
-    temp_tx.to_csv(target_path+curr_dir_name+'transcripts.csv.gz', index=False, compression='gzip')
+    temp_tx.to_csv(os.join.path(target_path,curr_dir_name,'transcripts.csv.gz'), index=False, compression='gzip')

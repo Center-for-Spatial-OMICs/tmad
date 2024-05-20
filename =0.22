@@ -1,0 +1,29 @@
+Collecting exceptiongroup
+  Downloading exceptiongroup-1.2.1-py3-none-any.whl.metadata (6.6 kB)
+Collecting pandas
+  Downloading pandas-2.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (19 kB)
+Collecting joblib
+  Using cached joblib-1.4.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting scikit-learn
+  Downloading scikit_learn-1.4.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (11 kB)
+Requirement already satisfied: numpy>=1.22.4 in /mnt/scratch1/miniconda3/envs/stardist/lib/python3.10/site-packages (from pandas) (1.26.4)
+Requirement already satisfied: python-dateutil>=2.8.2 in /mnt/scratch1/miniconda3/envs/stardist/lib/python3.10/site-packages (from pandas) (2.9.0.post0)
+Collecting pytz>=2020.1 (from pandas)
+  Using cached pytz-2024.1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting tzdata>=2022.7 (from pandas)
+  Using cached tzdata-2024.1-py2.py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: scipy>=1.6.0 in /mnt/scratch1/miniconda3/envs/stardist/lib/python3.10/site-packages (from scikit-learn) (1.13.0)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn)
+  Using cached threadpoolctl-3.5.0-py3-none-any.whl.metadata (13 kB)
+Requirement already satisfied: six>=1.5 in /mnt/scratch1/miniconda3/envs/stardist/lib/python3.10/site-packages (from python-dateutil>=2.8.2->pandas) (1.16.0)
+Downloading exceptiongroup-1.2.1-py3-none-any.whl (16 kB)
+Downloading pandas-2.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.0/13.0 MB 156.4 MB/s eta 0:00:00
+Using cached joblib-1.4.2-py3-none-any.whl (301 kB)
+Downloading scikit_learn-1.4.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.1/12.1 MB 159.6 MB/s eta 0:00:00
+Using cached pytz-2024.1-py2.py3-none-any.whl (505 kB)
+Using cached threadpoolctl-3.5.0-py3-none-any.whl (18 kB)
+Using cached tzdata-2024.1-py2.py3-none-any.whl (345 kB)
+Installing collected packages: pytz, tzdata, threadpoolctl, joblib, exceptiongroup, scikit-learn, pandas
+Successfully installed exceptiongroup-1.2.1 joblib-1.4.2 pandas-2.2.2 pytz-2024.1 scikit-learn-1.4.2 threadpoolctl-3.5.0 tzdata-2024.1
