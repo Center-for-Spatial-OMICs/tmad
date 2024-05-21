@@ -4,6 +4,7 @@ import os
 import scipy.io
 import gzip
 import sys
+import click
 
 # load the files
 # user inputted paths
@@ -13,10 +14,16 @@ coord_path = '/mnt/scratch1/Luke/XeniumTMASeparate/TMACoords_JP3084_PANC/'
 target_path = 'TOUCHSTONE_DIVORCE_XR_FFPE_PA_WCM_N_R1/'
 '''
 
-def main():
-    XR_path = sys.argv[0]
-    coord_path = sys.argv[1]
-    target_path = sys.argv[2]
+VERSION = "0.1.0"
+
+@click.command()
+@click.version_option(VERSION, message="%(version)s")
+@click.argument("paths", nargs=3)
+
+def main(paths):
+    XR_path = paths[0]
+    coord_path = paths[1]
+    target_path = paths[2]
 
     tx_path = os.path.join(XR_path,'transcripts.csv.gz')
     exp_mat = os.path.join(XR_path,'cell_feature_matrix')
@@ -136,11 +143,25 @@ def save_files(target_path, coord_files, TMA_indices, cols, exp, exp_mat, meta, 
         os.remove(os.join.path(target_path,curr_dir_name,'cell_feature_matrix/matrix.mtx'))
 
         # copy the features
-        if os.name == 'nt':  # Windows
+        '''if os.name == 'nt':  # Windows
             os.system(f'copy "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path,curr_dir_name,'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
         else:  # Unix-based (Linux, macOS)
-            os.system(f'cp "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path,curr_dir_name,'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')
+            os.system(f'cp "{f'{exp_mat}/features.tsv.gz'}" "{os.path.join(target_path,curr_dir_name,'cell_feature_matrix/', os.path.basename(f'{exp_mat}/features.tsv.gz'))}"')'''
 
+        # Construct the source and destination paths
+        source_path = os.path.join(exp_mat, 'features.tsv.gz')
+        destination_dir = os.path.join(target_path, curr_dir_name, 'cell_feature_matrix')
+        destination_path = os.path.join(destination_dir, os.path.basename(source_path))
+
+        # Ensure the destination directory exists
+        os.makedirs(destination_dir, exist_ok=True)
+
+        # Determine the appropriate copy command based on the OS
+        if os.name == 'nt':  # Windows
+            os.system(f'copy "{source_path}" "{destination_path}"')
+        else:  # Unix-based (Linux, macOS)
+            os.system(f'cp "{source_path}" "{destination_path}"')
+            
         # save the metadata
         temp_meta = meta[meta['TMA'] == (i+1)]
         temp_meta = temp_meta.drop(['TMA'], axis=1)
