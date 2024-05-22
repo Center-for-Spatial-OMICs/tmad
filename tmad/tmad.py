@@ -1,10 +1,10 @@
 import pandas as pd
-import numpy as np
+# import numpy as np
 import os
 import shutil
 import scipy.io
 import gzip
-import sys
+# import sys
 import click
 
 # load the files
@@ -15,20 +15,27 @@ coord_path = '/mnt/scratch1/Luke/XeniumTMASeparate/TMACoords_JP3084_PANC/'
 target_path = 'TOUCHSTONE_DIVORCE_XR_FFPE_PA_WCM_N_R1/'
 '''
 
-VERSION = "0.1.0"
 
-@click.command()
-@click.version_option(VERSION, message="%(version)s")
-@click.argument("paths", nargs=3)
+def get_version():
+    """Read and print the version from the version file"""
+    with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "VERSION"), "r") as f:
+        version = f.readline()
+    return version
 
-def main(paths):
-    XR_path = paths[0]
-    coord_path = paths[1]
-    target_path = paths[2]
 
-    tx_path = os.path.join(XR_path,'transcripts.csv.gz')
-    exp_mat = os.path.join(XR_path,'cell_feature_matrix')
-    meta_path = os.path.join(XR_path,'cells.csv.gz')
+@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
+@click.option('--xr_path', help="Dir for Xenium Run", type=click.Path(exists=True), required=True)
+@click.option('--coord_path', help="Dir for TMA coords", type=click.Path(exists=True), required=True)
+@click.option('--target_path', help="Output dir", type=click.Path(), required=True)
+@click.version_option(get_version(), "-v", "--version", is_flag=True)
+def main(xr_path, coord_path, target_path):
+    # XR_path = paths[0]
+    # coord_path = paths[1]
+    # target_path = paths[2]
+
+    tx_path = os.path.join(xr_path,'transcripts.csv.gz')
+    exp_mat = os.path.join(xr_path,'cell_feature_matrix')
+    meta_path = os.path.join(xr_path,'cells.csv.gz')
 
     tx = pd.read_csv(tx_path, compression='gzip')
     tx['TMA'] = 0
